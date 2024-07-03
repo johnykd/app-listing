@@ -31,7 +31,6 @@ export const rowsMock = [
 ];
 
 const TableListItems = ({rowsData}:any) => {
-    console.log("rowsData",rowsData)
   return (
     <>
     {
