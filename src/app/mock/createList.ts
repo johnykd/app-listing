@@ -148,3 +148,14 @@ export const categoryItems: any[] = [
     },
 
   ]
+  export const listItemsData: any[] = [
+    {
+      category: "",
+      size:"",
+      condition:"",
+      equipment:"",
+      packaging:""
+    }
+  ]
+
+  

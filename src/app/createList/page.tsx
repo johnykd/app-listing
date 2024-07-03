@@ -15,7 +15,8 @@ import InputAdornment from '@mui/material/InputAdornment';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import RightIcon from '../common/icons/RightIcon';
 import { FormListingStyled, CircleNumber, RowDetailItem, RowDetailItemLabel, RowDetailItemValue } from './creatListStyled';
-import { accessoriesEquipmentItems, apparelEquipmentItems, apparelSizeItems, bagsEquipmentItems, categoryItems, collectiblesSizeItems, conditionItems, packagingItems, shoesEquipmentItems, shoesSizeItems } from '../mock/createList';
+import { accessoriesEquipmentItems, apparelEquipmentItems, apparelSizeItems, bagsEquipmentItems, categoryItems, collectiblesSizeItems, conditionItems, packagingItems, shoesEquipmentItems, shoesSizeItems,listItemsData } from '../mock/createList';
+import TableListItems, { rowsMock } from '../common/components/TableListItems';
 
 const CreateListing = () => {
   const [category, setCategory] = React.useState('');
@@ -23,17 +24,22 @@ const CreateListing = () => {
   const [condition, setCondition] = React.useState('');
   const [equipment, setEquipment] = React.useState('');
   const [packaging, setPackaging] = React.useState('');
-
   const [sizeItems, setSizeItems] = useState(shoesSizeItems)
   const [equipmentItems, setEquipmentItems] = useState(shoesEquipmentItems)
-
-  const [inputs, setInputs] = useState({
-    category: "",
-    size:"",
-    condition:"",
-    equipment:"",
-    packaging:""
-  })
+  const [listItems, setListItems] = useState(listItemsData)
+  const [inputs, setInputs] = useState({})
+  const [isDisableSubmit, setIsDisableSubmit] = useState(true)
+  const [itemsNumber, setItemsNumber] = useState(0)
+  const [rowsData, setRowsData] = useState([] as any)
+  
+  const addListItems = () => {
+    const addItems = [
+      ...listItems,
+      {inputs}
+    ]
+    setListItems(addItems)
+    setItemsNumber(listItems.length)
+  };
 
   const handleChangeCategory = (e: SelectChangeEvent) => {
     setCategory(e.target.value);
@@ -41,10 +47,17 @@ const CreateListing = () => {
 
   const handleSubmit = (e:any) => {
     e.preventDefault();
-    console.log(inputs)
+    addListItems();
+    setRowsData(rowsMock)
+    console.log("list",listItems)
+
+
   }
 
   useEffect(() => {
+    if(category){
+      setIsDisableSubmit(false)
+    }
     if(category === 'shoes'){
       setSizeItems(shoesSizeItems)
       setEquipmentItems(shoesEquipmentItems)
@@ -65,6 +78,7 @@ const CreateListing = () => {
       setSizeItems(collectiblesSizeItems)
       setEquipmentItems(bagsEquipmentItems)
     }
+
     setInputs({
       category,
       size,
@@ -72,6 +86,7 @@ const CreateListing = () => {
       equipment,
       packaging
     })
+   
   }, [category, condition, size,equipment,packaging]);
   
   return (
@@ -90,12 +105,12 @@ const CreateListing = () => {
                   Total
                   </Typography>
                   <Typography variant="h6">
-                  0 Item
+                  {itemsNumber} Items
                   </Typography>
                </Box>
                 <Box>
-                  <Button sx={{marginRight:1}} variant="contained">Cancel</Button>
-                  <Button variant="outlined">Submit</Button>
+                  <Button sx={{marginRight:1}} variant="contained" color='error' disabled>Cancel</Button>
+                  <Button variant="outlined" disabled={itemsNumber==0}>Submit</Button>
                 </Box>
               </Box>
             </Grid>
@@ -123,7 +138,6 @@ const CreateListing = () => {
                     }
                     </Select>
                   </FormControl>
-
                 </FormListingStyled>
                 <FormListingStyled>
                   <Box sx={{display:'flex'}}>
@@ -380,19 +394,18 @@ const CreateListing = () => {
                  
                  </FormListingStyled>
                  <Box>
-                   <Button type='submit' variant="contained" size="large" sx={{borderRadius:3, backgroundColor:'rgba(27, 27, 27, 1)'}} endIcon={<RightIcon/>}>Add Listing</Button>
+                   <Button type='submit' variant="contained" size="large" sx={{borderRadius:3, backgroundColor:'black'}} endIcon={<RightIcon/>} disabled={isDisableSubmit}>Add Listing</Button>
                  </Box>
                 </Stack>
                </form>
             </Grid>
             <Grid item xs={7}>
                <FormListingStyled sx={{height:400}}>
-                 
+                  <TableListItems rowsData={rowsData}/>
                 </FormListingStyled>
             </Grid>
           </Grid>
       </Box>
-
     </>
   )
 }
