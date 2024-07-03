@@ -1,125 +1,64 @@
 "use client"
-import React from 'react'
-import {Box,Typography,alpha,Button,Grid,Stack,Card} from '@mui/material';
-import styled from '@emotion/styled';
-import { useForm } from 'react-hook-form';
+import React, { useEffect, useState } from 'react'
+import {Box,Typography,alpha,Button,Grid,Stack} from '@mui/material';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
-import FormHelperText from '@mui/material/FormHelperText';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import UploadIcon from '../icons/UploadIcon';
-import EditIcon from '../icons/EditIcon';
-import AlertIcon from '../icons/AlertIcon';
+import UploadIcon from '../common/icons/UploadIcon';
+import EditIcon from '../common/icons/EditIcon';
+import AlertIcon from '../common/icons/AlertIcon';
 import InputAdornment from '@mui/material/InputAdornment';
-import FilledInput from '@mui/material/FilledInput';
 import OutlinedInput from '@mui/material/OutlinedInput';
-import RightIcon from '../icons/RightIcon';
-
-const FormListingStyled = styled(Box)(() => ({
-  borderRadius: '16px',
-  padding: 24,
-  backgroundColor: '#FFFFFF',
-  boxShadow: `0px 12px 12px 0px ${alpha('#000', 0.04)}`
-}));
-
-const CircleNumber = styled(Box)(() => ({
-  borderRadius: '50%',
-  width: 12,
-  height: 12,
-  padding: 10,
-  backgroundColor: '#F3F4F6',
-  display:'flex',
-  alignItems: 'center'
-}));
-
-export const RowDetailItem = styled(Box)(() => ({
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  overflowWrap: 'break-word' as const,
-}));
-
-export const RowDetailItemLabel = styled(Box)(() => ({
-  flex: '0 1 50%',
-}));
-
-export const RowDetailItemValue = styled(Box)(() => ({
-  flex: '0 1 50%',
-  textAlign: 'right' as const,
-}));
-
-const categoryItems: any[] = [
-  { id: 1, name: 'shoes' },
-  { id: 2, name: 'apparel' },
-  { id: 3, name: 'collectibles'},
-  { id: 4, name: 'accessories'},
-  { id: 4, name: 'bags'},
-];
-
-interface IShoesSizeItems {
-  id: number;
-  size: number;
-  sizeText: string;
-}
-
-const shoesSizeItems: IShoesSizeItems[] = [
-  { id: 1, size: 4.5 ,sizeText: '4.5 US' },
-  { id: 2, size: 5 ,sizeText: '5 US' },
-  { id: 3, size: 5.5 ,sizeText: '5.5 US' },
-  { id: 4, size: 6 ,sizeText: '6 US' },
-  { id: 5, size: 6.5 ,sizeText: '6.5 US' },
-  { id: 5, size: 7 ,sizeText: '7 US' },
-];
-
-interface IConditionItems {
-  id: number;
-  value: string;
-  text: string;
-}
-
-const conditionItems: IConditionItems[] = [
-  {
-    id: 1,
-    value: "brand_new",
-    text: "Brand new"
-  },
-  {
-    id: 2,
-    value: "like_new",
-    text: "Pre-owned"
-  }
-]
-
-interface IEquipmentItems {
-  id: number;
-  equipment: string;
-  equipmentText: string;
-}
-
-const shoesEquipmentItems: IEquipmentItems[] = [
-  {
-    id: 1,
-    equipment: "ORIGINAL_BOX_NO_DEFECT",
-    equipmentText: "Box"
-  },
-  {
-    id: 2,
-    equipment: "ORIGINAL_BOX_WITH_DEFECT",
-    equipmentText: `Box (defect)"`
-  }
-]
+import RightIcon from '../common/icons/RightIcon';
+import { FormListingStyled, CircleNumber, RowDetailItem, RowDetailItemLabel, RowDetailItemValue } from './creatListStyled';
+import { apparelEquipmentItems, apparelSizeItems, categoryItems, conditionItems, shoesEquipmentItems, shoesSizeItems } from '../mock/createList';
 
 const CreateListing = () => {
-  const { createList, handleSubmit, formState: { errors } } = useForm();
-  const [age, setAge] = React.useState('');
+  const [category, setCategory] = React.useState('');
+  const [size, setSize] = React.useState('');
+  const [condition, setCondition] = React.useState('');
+  const [equipment, setEquipment] = React.useState('');
 
-  const handleChange = (event: SelectChangeEvent) => {
-    setAge(event.target.value);
+  const [sizeItems, setSizeItems] = useState(shoesSizeItems)
+  const [equipmentItems, setEquipmentItems] = useState(shoesEquipmentItems)
+
+  const [inputs, setInputs] = useState({
+    category: "",
+    size:"",
+    condition:"",
+    equipment:""
+  })
+
+  const handleChangeCategory = (e: SelectChangeEvent) => {
+    setCategory(e.target.value);
   };
+
+  const handleSubmit = (e:any) => {
+    e.preventDefault();
+    console.log(inputs)
+  }
+
+  useEffect(() => {
+    if(category === 'shoes'){
+      setSizeItems(shoesSizeItems)
+      setEquipmentItems(shoesEquipmentItems)
+    }
+    else if(category === 'apparel'){
+      setSizeItems(apparelSizeItems)
+      setEquipmentItems(apparelEquipmentItems)
+    }
+    setInputs({
+      category,
+      size,
+      condition,
+      equipment
+    })
+  }, [category, condition, size,equipment]);
+  
   return (
     <>
       <Box sx={{margin:4}}>
@@ -146,27 +85,30 @@ const CreateListing = () => {
               </Box>
             </Grid>
             <Grid item xs={5}>
+              <form onSubmit={handleSubmit}>
               <Stack spacing={4}>
                <FormListingStyled>
                   <Typography variant="h6" component="h1" gutterBottom>
                   Search a product to add
                   </Typography>
-                <FormControl required sx={{ m: 1, minWidth: '90%',mt:4}}>
-                  <InputLabel id="demo-simple-select-required-label">Category</InputLabel>
-                  <Select
-                    labelId="demo-simple-select-required-label"
-                    id="demo-simple-select-required"
-                    value={age}
-                    label="Category"
-                    onChange={handleChange}
-                  >
-                   {
-                    categoryItems.map((item) =>(
-                      <MenuItem key={item.id} value={item.name}>{item.name}</MenuItem>
-                    ))
-                   }
-                  </Select>
-                </FormControl>
+                  <FormControl sx={{mr:1, minWidth: '40%',mt:4}}>
+                    <InputLabel id="demo-simple-select-required-label">Category</InputLabel>
+                    <Select
+                      name='category'
+                      labelId="demo-simple-select-required-label"
+                      id="demo-simple-select-required"
+                      value={category}
+                      label="Category"
+                      onChange={handleChangeCategory}
+                    >
+                    {
+                      categoryItems.map((item) =>(
+                        <MenuItem key={item.id} value={item.name}>{item.name}</MenuItem>
+                      ))
+                    }
+                    </Select>
+                  </FormControl>
+
                 </FormListingStyled>
                 <FormListingStyled>
                   <Box sx={{display:'flex'}}>
@@ -176,7 +118,7 @@ const CreateListing = () => {
                       </Typography>
                     </CircleNumber>
                     <Box>
-                      <Button variant="outlined">Place ask</Button>
+                      <Button variant="outlined" >Place ask</Button>
                       <Button variant="outlined" disabled>Pre-order</Button>
                     </Box>
                   </Box>
@@ -190,30 +132,30 @@ const CreateListing = () => {
                       Product detail
                       </Typography>
                   </Box>
-                    <FormControl required sx={{mr:1, minWidth: '40%',mt:4}}>
+                    <FormControl sx={{mr:1, minWidth: '40%',mt:4}}>
                       <InputLabel id="demo-simple-select-required-label">Select Size</InputLabel>
                       <Select
                         labelId="demo-simple-select-required-label"
                         id="demo-simple-select-required"
-                        value={age}
+                        value={size}
                         label="Size"
-                        onChange={handleChange}
+                        onChange={e => setSize(e.target.value)}
                       >
                       {
-                        shoesSizeItems.map((item) => (
+                        sizeItems.map((item) => (
                           <MenuItem key={item.id} value={item.size}>{item.sizeText}</MenuItem>
                         ))
                       }
                       </Select>
                     </FormControl>
-                  <FormControl required sx={{ minWidth: '40%',mt:4}}>
+                  <FormControl sx={{ minWidth: '40%',mt:4}}>
                     <InputLabel id="demo-simple-select-required-label">Condition</InputLabel>
                     <Select
                       labelId="demo-simple-select-required-label"
                       id="demo-simple-select-required"
-                      value={age}
+                      value={condition}
                       label="Condition"
-                      onChange={handleChange}
+                      onChange={e => setCondition(e.target.value)}
                     >
                     {
                     conditionItems.map((item) =>(
@@ -222,17 +164,17 @@ const CreateListing = () => {
                    }
                     </Select>
                   </FormControl>
-                  <FormControl required sx={{ minWidth: '90%',mt:4}}>
+                  <FormControl sx={{ minWidth: '90%',mt:4}}>
                     <InputLabel id="demo-simple-select-required-label">Equipment</InputLabel>
                     <Select
                       labelId="demo-simple-select-required-label"
                       id="demo-simple-select-required"
-                      value={age}
+                      value={equipment}
                       label="Equipment"
-                      onChange={handleChange}
+                      onChange={e => setEquipment(e.target.value)}
                     >
                     {
-                      shoesEquipmentItems.map((item) => (
+                      equipmentItems.map((item) => (
                         <MenuItem key={item.id} value={item.equipment}>{item.equipmentText}</MenuItem>
                       ))
                     }
@@ -403,10 +345,10 @@ const CreateListing = () => {
                  
                  </FormListingStyled>
                  <Box>
-                   <Button variant="contained" size="large" sx={{borderRadius:3, backgroundColor:'rgba(27, 27, 27, 1)'}} endIcon={<RightIcon/>} disabled>Add Listing</Button>
+                   <Button type='submit' variant="contained" size="large" sx={{borderRadius:3, backgroundColor:'rgba(27, 27, 27, 1)'}} endIcon={<RightIcon/>}>Add Listing</Button>
                  </Box>
-
-              </Stack>
+                </Stack>
+               </form>
             </Grid>
             <Grid item xs={7}>
                <FormListingStyled sx={{height:400}}>
