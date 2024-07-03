@@ -64,3 +64,87 @@ export const categoryItems: any[] = [
       equipmentText: "Dust bag"
     }
   ]
+
+  export const packagingItems: any[] = [
+    {
+      id: 1,
+      value:"PACKAGING_SEALED",
+      text: "Sealed"
+    },
+    {
+      id: 2,
+      value:"PACKAGING_OPENED",
+      text: "Opened"
+    }
+  ]
+
+  export const collectiblesSizeItems: any[] = [
+    {
+      id: 1,
+      size:"ONE_SIZE",
+      sizeText: "One size"
+    },
+  
+  ]
+
+  export const accessoriesEquipmentItems: IEquipmentItems[] = [
+    {
+      id: 1,
+      equipment: "DETAILS_DUST_BAG",
+      equipmentText: "Dust bag",
+    },
+    {
+      id: 2,
+      equipment: "DETAILS_CARD_CERT",
+      equipmentText: "Card/Certificate",
+    },
+    {
+      id: 3,
+      equipment: "DETAILS_BOX",
+      equipmentText: "Box",
+    },
+    {
+      id: 4,
+      equipment: "DETAILS_RECEIPT",
+      equipmentText: "Receipt",
+    },
+    {
+      id: 5,
+      equipment: "DETAILS_PAPER_BAG",
+      equipmentText: "Paper bag",
+    },
+    {
+      id: 6,
+      equipment: "DETAILS_TAG",
+      equipmentText: "Tags",
+    }
+  ]
+
+  export const bagsEquipmentItems: IEquipmentItems[] = [
+    {
+      id: 1,
+      equipment: "DETAILS_DUST_BAG",
+      equipmentText: "Dust bag",
+    },
+    {
+      id: 2,
+      equipment: "DETAILS_CARD_CERT",
+      equipmentText: "Card/Certificate",
+    },
+    {
+      id: 3,
+      equipment: "DETAILS_BOX",
+      equipmentText: "Box",
+    },
+    {
+      id: 4,
+      equipment: "DETAILS_RECEIPT",
+      equipmentText: "Receipt",
+    },
+    {
+      id: 5,
+      equipment: "DETAILS_PAPER_BAG",
+      equipmentText: "Paper bag",
+    },
+
+  ]

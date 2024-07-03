@@ -1,6 +1,6 @@
 "use client"
 import React, { useEffect, useState } from 'react'
-import {Box,Typography,alpha,Button,Grid,Stack} from '@mui/material';
+import {Box,Typography,Button,Grid,Stack} from '@mui/material';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
@@ -15,13 +15,14 @@ import InputAdornment from '@mui/material/InputAdornment';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import RightIcon from '../common/icons/RightIcon';
 import { FormListingStyled, CircleNumber, RowDetailItem, RowDetailItemLabel, RowDetailItemValue } from './creatListStyled';
-import { apparelEquipmentItems, apparelSizeItems, categoryItems, conditionItems, shoesEquipmentItems, shoesSizeItems } from '../mock/createList';
+import { accessoriesEquipmentItems, apparelEquipmentItems, apparelSizeItems, bagsEquipmentItems, categoryItems, collectiblesSizeItems, conditionItems, packagingItems, shoesEquipmentItems, shoesSizeItems } from '../mock/createList';
 
 const CreateListing = () => {
   const [category, setCategory] = React.useState('');
   const [size, setSize] = React.useState('');
   const [condition, setCondition] = React.useState('');
   const [equipment, setEquipment] = React.useState('');
+  const [packaging, setPackaging] = React.useState('');
 
   const [sizeItems, setSizeItems] = useState(shoesSizeItems)
   const [equipmentItems, setEquipmentItems] = useState(shoesEquipmentItems)
@@ -30,7 +31,8 @@ const CreateListing = () => {
     category: "",
     size:"",
     condition:"",
-    equipment:""
+    equipment:"",
+    packaging:""
   })
 
   const handleChangeCategory = (e: SelectChangeEvent) => {
@@ -51,13 +53,26 @@ const CreateListing = () => {
       setSizeItems(apparelSizeItems)
       setEquipmentItems(apparelEquipmentItems)
     }
+    else if(category === 'collectibles' ){
+      setSizeItems(collectiblesSizeItems)
+      setEquipmentItems(shoesEquipmentItems)
+    }
+    else if(category === 'accessories' ){
+      setSizeItems(collectiblesSizeItems)
+      setEquipmentItems(accessoriesEquipmentItems)
+    }
+    else if(category === 'bags'){
+      setSizeItems(collectiblesSizeItems)
+      setEquipmentItems(bagsEquipmentItems)
+    }
     setInputs({
       category,
       size,
       condition,
-      equipment
+      equipment,
+      packaging
     })
-  }, [category, condition, size,equipment]);
+  }, [category, condition, size,equipment,packaging]);
   
   return (
     <>
@@ -180,6 +195,26 @@ const CreateListing = () => {
                     }
                     </Select>
                   </FormControl>
+                  {
+                    category ==='collectibles' && (
+                      <FormControl sx={{ minWidth: '90%',mt:4}}>
+                        <InputLabel id="demo-simple-select-required-label">Packaging</InputLabel>
+                        <Select
+                          labelId="demo-simple-select-required-label"
+                          id="demo-simple-select-required"
+                          value={packaging}
+                          label="Packaging"
+                          onChange={e => setPackaging(e.target.value)}
+                        >
+                        {
+                          packagingItems.map((item) => (
+                            <MenuItem key={item.id} value={item.value}>{item.text}</MenuItem>
+                          ))
+                        }
+                        </Select>
+                      </FormControl>
+                    ) 
+                  }
                   <Typography variant="h5" mt={2}>
                     Price
                   </Typography>
